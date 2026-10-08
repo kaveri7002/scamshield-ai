@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ScamShield AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-wrap">
+          <div class="brand-mark">🛡️</div>
+          <div>
+            <p class="eyebrow">AI-Powered Cybersecurity</p>
+            <h1>ScamShield AI</h1>
+          </div>
+        </div>
+        <div class="status-pill">Live Threat Scan</div>
+      </header>
+
+      <section class="dashboard">
+        <div class="stat-card">
+          <span class="label">Total Scans</span>
+          <strong id="total-scans">0</strong>
+        </div>
+        <div class="stat-card danger">
+          <span class="label">High Risk Detected</span>
+          <strong id="high-risk-count">0</strong>
+        </div>
+        <div class="stat-card warning">
+          <span class="label">Suspicious Detected</span>
+          <strong id="suspicious-count">0</strong>
+        </div>
+        <div class="stat-card safe">
+          <span class="label">Safe Messages</span>
+          <strong id="safe-count">0</strong>
+        </div>
+      </section>
+
+      <div class="risk-chart panel">
+        <div class="panel-header compact-header">
+          <h2>Risk Analysis</h2>
+        </div>
+        <div class="chart-wrap">
+          <div class="legend">
+            <span><i class="swatch safe-swatch"></i> Safe</span>
+            <span><i class="swatch suspicious-swatch"></i> Suspicious</span>
+            <span><i class="swatch danger-swatch"></i> High Risk</span>
+          </div>
+          <div class="bar-chart">
+            <div class="bar-segment safe-segment" id="safe-bar"></div>
+            <div class="bar-segment suspicious-segment" id="suspicious-bar"></div>
+            <div class="bar-segment danger-segment" id="danger-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Message Analyzer</h2>
+          </div>
+          <textarea id="message-input" placeholder="Paste a suspicious SMS, WhatsApp message, email, bank alert, job offer, or scholarship message here..."></textarea>
+          <div class="action-row">
+            <button id="analyze-message" class="primary-btn">🔍 Analyze Message</button>
+            <button id="explain-message" class="secondary-btn">🧠 Explain Simply</button>
+          </div>
+
+          <div class="result-box" id="message-result">
+            <p class="empty-state">Your scan result will appear here.</p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h2>URL Analyzer</h2>
+          </div>
+          <input id="url-input" type="text" placeholder="Paste a suspicious website URL here..." />
+          <div class="action-row single-action">
+            <button id="analyze-url" class="primary-btn">🔐 Scan URL</button>
+          </div>
+
+          <div class="result-box" id="url-result">
+            <p class="empty-state">URL safety analysis will appear here.</p>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel sample-panel">
+        <div class="panel-header">
+          <h2>Sample Scam Messages</h2>
+        </div>
+        <div class="sample-grid" id="sample-list"></div>
+      </section>
+
+      <div class="bottom-grid">
+        <section class="panel history-panel">
+          <div class="panel-header history-header">
+            <h2>Scan History</h2>
+            <button id="clear-history" class="ghost-btn">Clear History</button>
+          </div>
+          <div id="history-list" class="history-list">
+            <p class="empty-history">No scans yet.</p>
+          </div>
+        </section>
+
+        <section class="panel tips-panel">
+          <div class="panel-header">
+            <h2>Stay Safe Online</h2>
+          </div>
+          <ul class="tips-list">
+            <li>Never share your OTP or bank PIN with anyone.</li>
+            <li>Verify suspicious links before clicking.</li>
+            <li>Do not trust urgent payment or reward requests.</li>
+            <li>Check sender identity through official channels.</li>
+            <li>Use only the official website or customer-care number.</li>
+            <li>Report fraud messages quickly and block the sender.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
