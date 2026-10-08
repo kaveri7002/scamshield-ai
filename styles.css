@@ -20,6 +20,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-bottom: 100px;
 }
 
 body {
@@ -41,7 +42,66 @@ input {
 .app-shell {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 20px 60px;
+  padding: 32px 20px 110px;
+}
+
+#home,
+#messages,
+#links,
+#history,
+#tips {
+  scroll-margin-top: 24px;
+}
+
+.bottom-nav {
+  position: fixed;
+  z-index: 10;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  min-height: 74px;
+  padding: 8px max(12px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  background: #182f49;
+  border-top: 1px solid rgba(190, 213, 235, 0.14);
+  box-shadow: 0 -8px 24px rgba(2, 9, 20, 0.18);
+}
+
+.nav-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: #b8c9d9;
+  text-decoration: none;
+  font-size: 0.72rem;
+  font-weight: 600;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-item svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nav-item:hover,
+.nav-item:focus-visible,
+.nav-item.is-active {
+  color: #f0f6fc;
+}
+
+.nav-item:focus-visible {
+  outline: 2px solid #8dc5ff;
+  outline-offset: -3px;
+  border-radius: 10px;
 }
 
 .topbar {
@@ -506,6 +566,20 @@ input:focus {
   .app-shell {
     padding-left: 14px;
     padding-right: 14px;
+  }
+
+  .bottom-nav {
+    min-height: 72px;
+  }
+
+  .nav-item {
+    gap: 4px;
+    font-size: 0.68rem;
+  }
+
+  .nav-item svg {
+    width: 21px;
+    height: 21px;
   }
 
   .topbar {

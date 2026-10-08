@@ -306,9 +306,51 @@ function registerServiceWorker() {
   });
 }
 
+function setupDashboardNavigation() {
+  const navigationItems = [...document.querySelectorAll('.nav-item')];
+  const sections = navigationItems
+    .map((item) => document.getElementById(item.dataset.section))
+    .filter(Boolean);
+
+  function setActiveNavigation(item) {
+    navigationItems.forEach((navigationItem) => {
+      const isActive = navigationItem === item;
+      navigationItem.classList.toggle('is-active', isActive);
+      if (isActive) navigationItem.setAttribute('aria-current', 'location');
+      else navigationItem.removeAttribute('aria-current');
+    });
+  }
+
+  function updateActiveNavigation() {
+    const threshold = window.innerHeight * 0.45;
+    const visibleSections = sections
+      .map((section) => ({ section, top: section.getBoundingClientRect().top }))
+      .filter(({ top }) => top <= threshold);
+    if (!visibleSections.length) return;
+
+    const latestTop = Math.max(...visibleSections.map(({ top }) => top));
+    const currentItem = navigationItems.find((item) => item.classList.contains('is-active'));
+    const latestSections = visibleSections
+      .filter(({ top }) => Math.abs(top - latestTop) < 1)
+      .map(({ section }) => section);
+    const activeSection = latestSections.find((section) => section.id === currentItem?.dataset.section)
+      || latestSections[latestSections.length - 1];
+    const activeItem = navigationItems.find((item) => item.dataset.section === activeSection.id);
+    if (activeItem) setActiveNavigation(activeItem);
+  }
+
+  navigationItems.forEach((item) => {
+    item.addEventListener('click', () => setActiveNavigation(item));
+  });
+  window.addEventListener('scroll', updateActiveNavigation, { passive: true });
+  window.addEventListener('resize', updateActiveNavigation);
+  updateActiveNavigation();
+}
+
 function init() {
   setupInstallPrompt();
   registerServiceWorker();
+  setupDashboardNavigation();
   renderSampleCards();
   setBusy(document.getElementById('analyze-message'), handleAnalyzeMessage);
   setBusy(document.getElementById('analyze-url'), handleAnalyzeUrl);
