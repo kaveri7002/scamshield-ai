@@ -24,7 +24,9 @@ const messageInput = document.getElementById('message-input');
 const urlInput = document.getElementById('url-input');
 const historyList = document.getElementById('history-list');
 const statusPill = document.querySelector('.status-pill');
+const installButton = document.getElementById('install-app');
 let dashboardTotals = { total: 0, safe: 0, suspicious: 0, highRisk: 0 };
+let installPrompt;
 
 function getClientId() {
   let clientId = localStorage.getItem(clientIdKey);
@@ -93,14 +95,26 @@ function renderMessageResult(result) {
 
 function renderUrlResult(result) {
   const indicators = result.indicators.map((indicator) => `<li>${escapeHtml(indicator)}</li>`).join('');
+  const reputationChecks = result.reputationChecks.map((check) => `
+    <li class="reputation-check ${check.status}">
+      <strong>${check.status === 'flagged' ? 'Flag' : 'Checked'}: ${escapeHtml(check.label)}</strong>
+      <span>${escapeHtml(check.detail)}</span>
+    </li>
+  `).join('');
   document.getElementById('url-result').innerHTML = `
     <div class="result-grid">
       <div class="score-row">
         <h3>URL Risk Score: ${result.score}/100</h3>
         <span class="score-badge ${getRiskClass(result.score)}">${escapeHtml(result.riskLevel)}</span>
       </div>
+      ${result.domain ? `<div><h4>Domain:</h4><p>${escapeHtml(result.domain)}</p></div>` : ''}
       <div><h4>Threat Type:</h4><p>${escapeHtml(result.threatType)}</p></div>
       <div><h4>Threat Level:</h4><p>${escapeHtml(result.status)}</p></div>
+      <div>
+        <h4>Reputation signals (local checks):</h4>
+        <ul class="reputation-list">${reputationChecks || '<li>No additional checks were available for this input.</li>'}</ul>
+        <p class="reputation-note">${escapeHtml(result.reputationSource)}</p>
+      </div>
       <div><h4>Detected indicators:</h4><ul class="indicator-list">${indicators}</ul></div>
       <div><h4>Safety recommendation:</h4><p>${escapeHtml(result.recommendation)}</p></div>
     </div>
@@ -247,7 +261,54 @@ function setBusy(button, action) {
   });
 }
 
+function setupInstallPrompt() {
+  const isAppleMobileDevice = /iPhone|iPad|iPod/.test(navigator.userAgent)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    installPrompt = event;
+    installButton.hidden = false;
+  });
+
+  if (isAppleMobileDevice) {
+    installButton.textContent = 'Add to Home Screen';
+    installButton.hidden = false;
+  }
+
+  window.addEventListener('appinstalled', () => {
+    installPrompt = null;
+    installButton.hidden = true;
+    statusPill.textContent = 'App installed';
+  });
+
+  installButton.addEventListener('click', async () => {
+    if (!installPrompt) {
+      if (isAppleMobileDevice) window.alert('In Safari, tap Share, then choose “Add to Home Screen”.');
+      return;
+    }
+    installButton.disabled = true;
+    try {
+      await installPrompt.prompt();
+      const { outcome } = await installPrompt.userChoice;
+      if (outcome === 'accepted') installButton.hidden = true;
+      installPrompt = null;
+    } finally {
+      installButton.disabled = false;
+    }
+  });
+}
+
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.register('/service-worker.js').catch((error) => {
+    console.error('ScamShield offline support could not be enabled:', error);
+  });
+}
+
 function init() {
+  setupInstallPrompt();
+  registerServiceWorker();
   renderSampleCards();
   setBusy(document.getElementById('analyze-message'), handleAnalyzeMessage);
   setBusy(document.getElementById('analyze-url'), handleAnalyzeUrl);

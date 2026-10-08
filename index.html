@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ScamShield AI</title>
+    <meta name="theme-color" content="#07182e" />
+    <meta name="description" content="Check suspicious messages and links with ScamShield AI." />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icons/scamshield.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/scamshield-192.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -19,7 +27,10 @@
             <h1>ScamShield AI</h1>
           </div>
         </div>
-        <div class="status-pill">Live Threat Scan</div>
+        <div class="header-actions">
+          <button id="install-app" class="install-btn" type="button" hidden>Install app</button>
+          <div class="status-pill">Live Threat Scan</div>
+        </div>
       </header>
 
       <section class="dashboard">

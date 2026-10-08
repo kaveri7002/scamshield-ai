@@ -2,7 +2,9 @@
 
 ScamShield is a scam-message and suspicious-URL analysis prototype. The frontend is a static Vite app, the API is an Express service, and scan summaries are stored in MongoDB Atlas.
 
-The analyzer uses transparent, local rules; it does not call an AI provider or a live threat-intelligence service. URL results are indicators only and are not proof that a site is safe or malicious.
+The analyzer uses transparent, local rules; it does not call an AI provider or a live threat-intelligence service. URL reputation signals include suspicious URL structure, lookalike brand labels, encoded internationalized domains, and other heuristic indicators. These results are not proof that a site is safe or malicious.
+
+The frontend is an installable Progressive Web App (PWA). On supported browsers, use **Install app** in the header or the browser's install option. On iPhone/iPad, open the site in Safari, tap **Share**, then **Add to Home Screen**. The app shell can open offline, but scanning and server-backed history require an internet connection.
 
 ## Requirements
 
@@ -75,5 +77,5 @@ The database stores only the input type, risk score, risk level, threat category
 ## Limitations
 
 - Analysis is heuristic and can miss scams or flag legitimate messages.
-- URL checks inspect the submitted URL string only. They do not visit the destination, check certificates, or query a threat-intelligence feed.
+- URL checks inspect the submitted URL string only. They do not visit the destination, check certificates, or query a threat-intelligence feed; reputation signals are local heuristics and can produce false positives or miss threats.
 - The “Explain Simply” feature uses a built-in explanation rather than a generative AI model.

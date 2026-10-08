@@ -52,6 +52,26 @@ input {
   margin-bottom: 22px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.install-btn {
+  border: 1px solid rgba(120, 203, 255, 0.4);
+  border-radius: 999px;
+  padding: 10px 16px;
+  background: rgba(21, 60, 104, 0.72);
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.install-btn:hover {
+  background: rgba(33, 86, 145, 0.9);
+}
+
 .brand-wrap {
   display: flex;
   align-items: center;
@@ -381,6 +401,33 @@ input:focus {
   line-height: 1.6;
 }
 
+.reputation-list {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reputation-check {
+  display: grid;
+  gap: 3px;
+  border-left: 3px solid var(--safe);
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  line-height: 1.5;
+}
+
+.reputation-check.flagged {
+  border-left-color: var(--danger);
+}
+
+.reputation-note {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
 .sample-panel {
   margin-bottom: 20px;
 }
@@ -464,6 +511,12 @@ input:focus {
   .topbar {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .brand-wrap {

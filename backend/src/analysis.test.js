@@ -21,3 +21,26 @@ test('flags suspicious URL patterns without claiming certainty', () => {
   assert.equal(result.status, 'Potentially suspicious');
   assert.ok(result.indicators.length > 0);
 });
+
+test('explains domain reputation signals without claiming a live lookup', () => {
+  const result = analyzeUrl('https://paypa1-login.xyz/account');
+  assert.equal(result.domain, 'paypa1-login.xyz');
+  assert.match(result.reputationSource, /no live threat-intelligence feed/i);
+  assert.ok(result.reputationChecks.some((check) => check.status === 'flagged' && /impersonation/i.test(check.label)));
+  assert.ok(result.reputationChecks.some((check) => check.status === 'flagged' && /TLD/i.test(check.label)));
+});
+
+test('marks a normal HTTPS domain as unverified rather than guaranteed safe', () => {
+  const result = analyzeUrl('https://example.com/');
+  assert.equal(result.riskLevel, 'SAFE');
+  assert.ok(result.reputationChecks.some((check) => check.label === 'HTTPS connection' && check.status === 'passed'));
+  assert.match(result.recommendation, /does not prove the site is safe/i);
+});
+
+test('flags embedded credentials, punycode, and unusual ports', () => {
+  const result = analyzeUrl('https://user:pass@xn--bcher-kva.xyz:8443/login');
+  const flaggedChecks = result.reputationChecks.filter((check) => check.status === 'flagged');
+  assert.ok(flaggedChecks.some((check) => check.label === 'Credentials embedded in URL'));
+  assert.ok(flaggedChecks.some((check) => check.label === 'Internationalized (punycode) domain'));
+  assert.ok(flaggedChecks.some((check) => check.label === 'Unusual destination port'));
+});
